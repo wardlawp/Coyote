@@ -164,15 +164,15 @@ public class SquirrelAI : MonoBehaviour {
 
     private GameObject findNut()
     {
-        GameObject[] trees = GameObject.FindGameObjectsWithTag("Nut");
+        GameObject[] nuts = GameObject.FindGameObjectsWithTag("Nut");
 
-        if (trees.Length == 0)
+        if (nuts.Length == 0)
         {
             return null;
         }
         else
         {
-            return findClosest(trees);
+            return findClosest(nuts);
         }
     }
 
