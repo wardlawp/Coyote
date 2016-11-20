@@ -1,120 +1,150 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SquirrelAI : MonoBehaviour {
+public class MagpieAI : MonoBehaviour
+{
 
     //Public attributes
-    public float predatorThreshold = 2.0f;
-    public float speed = 3.5f;
+    public float speed = 9.0f;
+    public float leaveTreeThreshold = 5.0f;
+    public float turnSpeedMax = 120.0f;
 
-    enum state { Chilling, GettingNut, Fleeing, Dieing };
+    //References to Two colliders
+    BoxCollider2D bodyCollider;
+    PolygonCollider2D viewCollider;
+
+    enum state { Chilling, GoingToGarbage, Munching, Fleeing };
     state currentState;
 
-    //GettingNut State
+    float nextTurnTime;
+    bool atGarbage;
     GameObject target;
-    bool ateNut;
-
-    //Fleeing
     GameObject homeTree;
+    float turnSpeed;
     private GameObject doggo;
 
-    Animator anim;
+    //Fleeing
+    GameObject targetTree;
+    bool seeDoggo;
 
     #region Public
 
     void Start()
     {
-        anim = GetComponent<Animator>();
         currentState = state.Fleeing;
+        seeDoggo = false;
+        atGarbage = false;
+        targetTree = findHomeTree();
+        nextTurnTime = calculateNextTurnTime();
         doggo = GameObject.FindGameObjectWithTag("Player");
-        ateNut = false;
+        bodyCollider = GetComponent<BoxCollider2D>();
+        viewCollider = GetComponent<PolygonCollider2D>();
         homeTree = findHomeTree();
-    }
-
-    public void bitten()
-    {
-        currentState = state.Dieing;
-        anim.SetBool("dieing", true);
+        turnSpeed = 0.0f;
     }
 
     void Update()
     {
         if (currentState == state.Chilling) handleChilling();
-        else if (currentState == state.GettingNut) handleGettingNut();
+        else if (currentState == state.GoingToGarbage) handleGoingToGarbage();
+        else if (currentState == state.Munching) handleMunching();
         else if (currentState == state.Fleeing) handleFleeing();
-        else if (currentState == state.Dieing) handleDieing();
     }
 
     public void OnTriggerEnter2D(Collider2D other)
     {
-
-        string tag = other.gameObject.tag;
-        if (tag == "Nut")
-        {
-            ateNut = true;
-            Destroy(other.gameObject);
-        }
+        atGarbage = (bodyCollider.bounds.Intersects(other.bounds) && other.gameObject.tag == "Garbage");
+        seeDoggo = (viewCollider.bounds.Intersects(other.bounds) && other.gameObject.tag == "Player");
     }
 
     #endregion
 
     #region state machine
 
-    void handleDieing()
-    {
-        transform.Rotate(Vector3.forward * 120*Time.deltaTime);
-    }
-
     /// <summary>
     /// Handle actions in the chilling state. When Chilling the Squirrel is looking for nuts
     /// </summary>
+
     private void handleChilling()
     {
-        var nut = findNut();
-        bool dog2Close = (doggoDistance() < predatorThreshold);
+        //Look for garbage to eat
+        var garbage = findGarbage();
+        //If found then transition to going to garbage
 
-        if ((nut != null) && ! dog2Close)
+        bool dog2Close = (doggoDistance() < leaveTreeThreshold);
+
+        if ((garbage != null) && !dog2Close)
         {
-            transitionToGettingNut(nut);
+            transitionToGoingToGarbage(garbage);
         }
     }
 
-    private void transitionToGettingNut(GameObject nut)
+    private void transitionToGoingToGarbage(GameObject garbage)
     {
-        anim.SetBool("running", true);
-        ateNut = false;
-        target = nut;
-        currentState = state.GettingNut;
+        target = garbage;
+        currentState = state.GoingToGarbage;
     }
 
-    private void handleGettingNut()
+    private void handleGoingToGarbage()
     {
-    
-        if (doggoDistance() < predatorThreshold) {
+        if (seeDoggo)
+        {
             transitionToFleeing();
             return;
         }
-        else if (!ateNut && target != null)
+        else if(atGarbage)
         {
-            gotoObj(target);
+            transitionToMunching();
         }
         else
         {
-            goToHomeTree();
+            gotoObj(target);
         }
-        
+    }
+
+    private void transitionToMunching()
+    {
+        currentState = state.Munching;
+    }
+
+    private void handleMunching()
+    {
+        if(seeDoggo)
+        {
+            transitionToFleeing();
+            return;
+        }
+        if(Time.time > nextTurnTime)
+        {
+            if(turnSpeed == 0.0f)
+            {
+                turnSpeed = Random.Range(-turnSpeedMax, turnSpeedMax);
+            }
+            else
+            {
+                turnSpeed = 0.0f;
+            }
+           
+            nextTurnTime = calculateNextTurnTime();
+        }
+
+        transform.Rotate(Vector3.forward * (turnSpeed * Time.deltaTime));
     }
 
     private void transitionToFleeing()
     {
-        homeTree = findHomeTree();
+        seeDoggo = false;
         currentState = state.Fleeing;
+
+        homeTree = findHomeTree();
+
     }
 
     private void handleFleeing()
     {
         //Go back to tree
         goToHomeTree();
+
     }
 
     #endregion
@@ -130,11 +160,7 @@ public class SquirrelAI : MonoBehaviour {
 
     private void goToHomeTree()
     {
-        if (atTree())
-        {
-            anim.SetBool("running", false);
-            currentState = state.Chilling;
-        }
+        if (atTree()) currentState = state.Chilling;
         else gotoObj(homeTree);
     }
 
@@ -182,9 +208,9 @@ public class SquirrelAI : MonoBehaviour {
         return closestobj;
     }
 
-    private GameObject findNut()
+    private GameObject findGarbage()
     {
-        GameObject[] nuts = GameObject.FindGameObjectsWithTag("Nut");
+        GameObject[] nuts = GameObject.FindGameObjectsWithTag("Garbage");
 
         if (nuts.Length == 0)
         {
@@ -201,5 +227,10 @@ public class SquirrelAI : MonoBehaviour {
         return Vector2.Distance(transform.position, doggo.transform.position);
     }
 
+
+    private float calculateNextTurnTime()
+    {
+        return Time.time + Random.Range(1.0f, 6.0f);
+    }
     #endregion
 }

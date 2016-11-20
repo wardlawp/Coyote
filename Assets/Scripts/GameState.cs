@@ -23,7 +23,7 @@ public class GameState : MonoBehaviour {
 
         if(GameObject.FindGameObjectsWithTag("Squirrel").Length == 0)
         {
-            UIText.text = "You have winned!";
+            UIText.text = "You are winner weener chicken dinner!";
         }
 	}
 }

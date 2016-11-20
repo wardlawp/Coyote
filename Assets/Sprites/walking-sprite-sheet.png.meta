@@ -1,9 +1,20 @@
 fileFormatVersion: 2
 guid: baafe8846a14543ada5503de2a46f950
-timeCreated: 1479593460
+timeCreated: 1479597084
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: walking-sprite-sheet_1
+    21300002: walking-sprite-sheet_2
+    21300004: walking-sprite-sheet_3
+    21300006: walking-sprite-sheet_4
+    21300008: walking-sprite-sheet_6
+    21300010: walking-sprite-sheet_7
+    21300012: walking-sprite-sheet_8
+    21300014: walking-sprite-sheet_9
+    21300016: walking-sprite-sheet_10
+    21300018: walking-sprite-sheet_30
+    21300020: walking-sprite-sheet_11
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -51,7 +62,150 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: walking-sprite-sheet_1
+      rect:
+        serializedVersion: 2
+        x: 1411
+        y: 2852
+        width: 738
+        height: 1289
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: walking-sprite-sheet_2
+      rect:
+        serializedVersion: 2
+        x: 2389
+        y: 2715
+        width: 747
+        height: 1426
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: walking-sprite-sheet_3
+      rect:
+        serializedVersion: 2
+        x: 3388
+        y: 2770
+        width: 738
+        height: 1371
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: walking-sprite-sheet_4
+      rect:
+        serializedVersion: 2
+        x: 4390
+        y: 2714
+        width: 750
+        height: 1427
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: walking-sprite-sheet_6
+      rect:
+        serializedVersion: 2
+        x: 1329
+        y: 1546
+        width: 477
+        height: 875
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: walking-sprite-sheet_7
+      rect:
+        serializedVersion: 2
+        x: 2143
+        y: 1452
+        width: 393
+        height: 969
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: walking-sprite-sheet_8
+      rect:
+        serializedVersion: 2
+        x: 2861
+        y: 1469
+        width: 389
+        height: 952
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: walking-sprite-sheet_9
+      rect:
+        serializedVersion: 2
+        x: 3579
+        y: 1452
+        width: 392
+        height: 969
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: walking-sprite-sheet_10
+      rect:
+        serializedVersion: 2
+        x: 4419
+        y: 1114
+        width: 1400
+        height: 1283
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: walking-sprite-sheet_30
+      rect:
+        serializedVersion: 2
+        x: 3983
+        y: 192
+        width: 583
+        height: 817
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: walking-sprite-sheet_11
+      rect:
+        serializedVersion: 2
+        x: 4220
+        y: 2076
+        width: 129
+        height: 335
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
     outline: []
   spritePackingTag: 
   userData: 
