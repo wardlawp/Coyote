@@ -12,8 +12,8 @@ public class MagpieAI : PrayAI
     BoxCollider2D bodyCollider;
     PolygonCollider2D viewCollider;
 
-    public enum state { Chilling, GoingToGarbage, Munching, Fleeing, Dieing };
-    public state currentState;
+    enum state { Chilling, GoingToGarbage, Munching, Fleeing, Dieing };
+    state currentState;
 
     float startFlyDelay;
     float chillInTreeUntil;
@@ -204,7 +204,7 @@ public class MagpieAI : PrayAI
 
     private float calculateNextTurnTime()
     {
-        return Time.time + Random.Range(1.0f, 6.0f);
+        return Time.time + Random.Range(0.0f, 3.0f);
     }
     #endregion
 }
