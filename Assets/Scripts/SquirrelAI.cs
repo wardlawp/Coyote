@@ -1,40 +1,40 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SquirrelAI : MonoBehaviour {
+public class SquirrelAI : PrayAI {
 
     //Public attributes
     public float predatorThreshold = 2.0f;
-    public float speed = 3.5f;
+   
 
     enum state { Chilling, GettingNut, Fleeing, Dieing };
     state currentState;
 
     //GettingNut State
-    GameObject target;
+    GameObject targetNut;
+
     bool ateNut;
 
-    //Fleeing
-    GameObject homeTree;
-    private GameObject doggo;
-
-    Animator anim;
 
     #region Public
 
-    void Start()
+    new void Start()
     {
-        anim = GetComponent<Animator>();
+        base.Start();
         currentState = state.Fleeing;
-        doggo = GameObject.FindGameObjectWithTag("Player");
+        
         ateNut = false;
-        homeTree = findHomeTree();
     }
 
     public void bitten()
     {
         currentState = state.Dieing;
         anim.SetBool("dieing", true);
+
+        if(homeTree != null)
+        {
+            homeTree.GetComponent<Tree>().free();
+        }
     }
 
     void Update()
@@ -62,7 +62,7 @@ public class SquirrelAI : MonoBehaviour {
 
     void handleDieing()
     {
-        transform.Rotate(Vector3.forward * 120*Time.deltaTime);
+        transform.Rotate(Vector3.forward * 50 * Time.deltaTime);
     }
 
     /// <summary>
@@ -81,9 +81,10 @@ public class SquirrelAI : MonoBehaviour {
 
     private void transitionToGettingNut(GameObject nut)
     {
+        homeTree.GetComponent<Tree>().free();
         anim.SetBool("running", true);
         ateNut = false;
-        target = nut;
+        targetNut = nut;
         currentState = state.GettingNut;
     }
 
@@ -94,9 +95,9 @@ public class SquirrelAI : MonoBehaviour {
             transitionToFleeing();
             return;
         }
-        else if (!ateNut && target != null)
+        else if (!ateNut && targetNut != null)
         {
-            gotoObj(target);
+            gotoObj(targetNut);
         }
         else
         {
@@ -121,16 +122,11 @@ public class SquirrelAI : MonoBehaviour {
 
     #region private helpers
 
-    private float angleBetweenVector2(Vector2 from, Vector2 to)
-    {
-        Vector2 diference = to - from;
-        float sign = (to.y < from.y) ? -1.0f : 1.0f;
-        return Vector2.Angle(Vector2.right, diference) * sign - 90;
-    }
+    
 
     private void goToHomeTree()
     {
-        if (atTree())
+        if (atTree(homeTree))
         {
             anim.SetBool("running", false);
             currentState = state.Chilling;
@@ -138,68 +134,11 @@ public class SquirrelAI : MonoBehaviour {
         else gotoObj(homeTree);
     }
 
-    private bool atTree()
-    {
-        return Vector2.Distance(homeTree.transform.position, transform.position) < 0.1;
-    }
-
-    private void gotoObj(GameObject obj)
-    {
-        transform.eulerAngles = new Vector3(0, 0, angleBetweenVector2(transform.position, obj.transform.position));
-        transform.Translate(new Vector3(0, speed * Time.deltaTime));
-    }
-
-    private GameObject findHomeTree()
-    {
-        GameObject[] trees = GameObject.FindGameObjectsWithTag("Tree");
-
-        if (trees.Length == 0)
-        {
-            return null;
-        }
-        else
-        {
-            return findClosest(trees);
-        }
-    }
-
-    private GameObject findClosest(GameObject[] objs)
-    {
-        GameObject closestobj = null;
-        float closestDistance = float.MaxValue;
-
-        foreach (GameObject obj in objs)
-        {
-            float distance = Vector2.Distance(obj.transform.position, transform.position);
-
-            if (distance < closestDistance)
-            {
-                closestobj = obj;
-                closestDistance = distance;
-            }
-        }
-
-        return closestobj;
-    }
+    
 
     private GameObject findNut()
     {
-        GameObject[] nuts = GameObject.FindGameObjectsWithTag("Nut");
-
-        if (nuts.Length == 0)
-        {
-            return null;
-        }
-        else
-        {
-            return findClosest(nuts);
-        }
+        return findClosestObj("Nut");
     }
-
-    private float doggoDistance()
-    {
-        return Vector2.Distance(transform.position, doggo.transform.position);
-    }
-
     #endregion
 }

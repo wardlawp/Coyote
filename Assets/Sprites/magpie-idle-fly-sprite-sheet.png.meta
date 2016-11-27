@@ -1,0 +1,157 @@
+fileFormatVersion: 2
+guid: 49ef12e4771c9b945aeb6db30739aef9
+timeCreated: 1480195826
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: magpie-idle-fly-sprite-sheet_6
+    21300002: magpie-idle-fly-sprite-sheet_7
+    21300004: magpie-idle-fly-sprite-sheet_9
+    21300006: magpie-idle-fly-sprite-sheet_10
+    21300008: magpie-idle-fly-sprite-sheet_11
+    21300010: magpie-idle-fly-sprite-sheet_12
+    21300012: magpie-idle-fly-sprite-sheet_18
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: magpie-idle-fly-sprite-sheet_6
+      rect:
+        serializedVersion: 2
+        x: 238
+        y: 192
+        width: 192
+        height: 785
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: magpie-idle-fly-sprite-sheet_7
+      rect:
+        serializedVersion: 2
+        x: 712
+        y: 195
+        width: 205
+        height: 781
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: magpie-idle-fly-sprite-sheet_9
+      rect:
+        serializedVersion: 2
+        x: 1393
+        y: 205
+        width: 259
+        height: 774
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: magpie-idle-fly-sprite-sheet_10
+      rect:
+        serializedVersion: 2
+        x: 1947
+        y: 204
+        width: 574
+        height: 793
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: magpie-idle-fly-sprite-sheet_11
+      rect:
+        serializedVersion: 2
+        x: 2724
+        y: 196
+        width: 807
+        height: 803
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: magpie-idle-fly-sprite-sheet_12
+      rect:
+        serializedVersion: 2
+        x: 3678
+        y: 136
+        width: 1216
+        height: 870
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: magpie-idle-fly-sprite-sheet_18
+      rect:
+        serializedVersion: 2
+        x: 1233
+        y: 218
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

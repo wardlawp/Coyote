@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MagpieAI : MonoBehaviour
+public class MagpieAI : PrayAI
 {
 
     //Public attributes
-    public float speed = 9.0f;
     public float leaveTreeThreshold = 5.0f;
     public float turnSpeedMax = 120.0f;
 
@@ -13,36 +12,64 @@ public class MagpieAI : MonoBehaviour
     BoxCollider2D bodyCollider;
     PolygonCollider2D viewCollider;
 
-    enum state { Chilling, GoingToGarbage, Munching, Fleeing };
-    state currentState;
+    public enum state { Chilling, GoingToGarbage, Munching, Fleeing, Dieing };
+    public state currentState;
 
+    float startFlyDelay;
+    float chillInTreeUntil;
     float nextTurnTime;
     bool atGarbage;
-    GameObject target;
-    GameObject homeTree;
-    float turnSpeed;
-    private GameObject doggo;
+    GameObject targetGarbage;
+
+    float currentTurnSpeed;
+
 
     //Fleeing
-    GameObject targetTree;
     bool seeDoggo;
 
     #region Public
 
-    void Start()
+    new void Start()
     {
+        base.Start();
+
         currentState = state.Fleeing;
+        anim.SetBool("flying", true);
+
         seeDoggo = false;
         atGarbage = false;
-        targetTree = findHomeTree();
+
         nextTurnTime = calculateNextTurnTime();
-        doggo = GameObject.FindGameObjectWithTag("Player");
+        currentTurnSpeed = 0.0f;
+
         bodyCollider = GetComponent<BoxCollider2D>();
         viewCollider = GetComponent<PolygonCollider2D>();
-        homeTree = findHomeTree();
-        turnSpeed = 0.0f;
     }
 
+    public void ahhhhh()
+    {
+        if(currentState != state.Dieing)
+            transitionToFleeing();
+    }
+
+    public void bitten()
+    {
+        currentState = state.Dieing;
+        anim.SetBool("dieing", true);
+
+        GameObject[] otherMagPies = GameObject.FindGameObjectsWithTag("Magpie");
+
+        foreach(GameObject magPie in otherMagPies)
+        {
+            magPie.SendMessage("ahhhhh");
+        }
+
+        if (homeTree != null)
+        {
+            homeTree.GetComponent<Tree>().free();
+        }
+
+    }
     void Update()
     {
         if (currentState == state.Chilling) handleChilling();
@@ -53,6 +80,7 @@ public class MagpieAI : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D other)
     {
+        
         atGarbage = (bodyCollider.bounds.Intersects(other.bounds) && other.gameObject.tag == "Garbage");
         seeDoggo = (viewCollider.bounds.Intersects(other.bounds) && other.gameObject.tag == "Player");
     }
@@ -73,15 +101,19 @@ public class MagpieAI : MonoBehaviour
 
         bool dog2Close = (doggoDistance() < leaveTreeThreshold);
 
-        if ((garbage != null) && !dog2Close)
+        if ((garbage != null) && !dog2Close  && chillInTreeUntil < Time.time)
         {
+            startFlyDelay = Time.time + 0.3f;
             transitionToGoingToGarbage(garbage);
         }
     }
 
     private void transitionToGoingToGarbage(GameObject garbage)
     {
-        target = garbage;
+        startFlyDelay = Time.time + 0.3f;
+        anim.SetBool("flying", true);
+        homeTree.GetComponent<Tree>().free();
+        targetGarbage = garbage;
         currentState = state.GoingToGarbage;
     }
 
@@ -92,18 +124,19 @@ public class MagpieAI : MonoBehaviour
             transitionToFleeing();
             return;
         }
-        else if(atGarbage)
+        else if(atGarbage || (Vector2.Distance(transform.position, targetGarbage.transform.position) < 1.0f) )
         {
             transitionToMunching();
         }
-        else
+        else if (Time.time > startFlyDelay)
         {
-            gotoObj(target);
+            gotoObj(targetGarbage);
         }
     }
 
     private void transitionToMunching()
     {
+        anim.SetBool("flying", false);
         currentState = state.Munching;
     }
 
@@ -111,28 +144,30 @@ public class MagpieAI : MonoBehaviour
     {
         if(seeDoggo)
         {
+            startFlyDelay = Time.time + 0.3f;
             transitionToFleeing();
             return;
         }
         if(Time.time > nextTurnTime)
         {
-            if(turnSpeed == 0.0f)
+            if(currentTurnSpeed == 0.0f)
             {
-                turnSpeed = Random.Range(-turnSpeedMax, turnSpeedMax);
+                currentTurnSpeed = Random.Range(-turnSpeedMax, turnSpeedMax);
             }
             else
             {
-                turnSpeed = 0.0f;
+                currentTurnSpeed = 0.0f;
             }
            
             nextTurnTime = calculateNextTurnTime();
         }
 
-        transform.Rotate(Vector3.forward * (turnSpeed * Time.deltaTime));
+        transform.Rotate(Vector3.forward * (currentTurnSpeed * Time.deltaTime));
     }
 
     private void transitionToFleeing()
     {
+        anim.SetBool("flying", true);
         seeDoggo = false;
         currentState = state.Fleeing;
 
@@ -151,82 +186,21 @@ public class MagpieAI : MonoBehaviour
 
     #region private helpers
 
-    private float angleBetweenVector2(Vector2 from, Vector2 to)
-    {
-        Vector2 diference = to - from;
-        float sign = (to.y < from.y) ? -1.0f : 1.0f;
-        return Vector2.Angle(Vector2.right, diference) * sign - 90;
-    }
-
     private void goToHomeTree()
     {
-        if (atTree()) currentState = state.Chilling;
-        else gotoObj(homeTree);
-    }
-
-    private bool atTree()
-    {
-        return Vector2.Distance(homeTree.transform.position, transform.position) < 0.1;
-    }
-
-    private void gotoObj(GameObject obj)
-    {
-        transform.eulerAngles = new Vector3(0, 0, angleBetweenVector2(transform.position, obj.transform.position));
-        transform.Translate(new Vector3(0, speed * Time.deltaTime));
-    }
-
-    private GameObject findHomeTree()
-    {
-        GameObject[] trees = GameObject.FindGameObjectsWithTag("Tree");
-
-        if (trees.Length == 0)
+        if (atTree(homeTree))
         {
-            return null;
+            chillInTreeUntil = calculateNextTurnTime();
+            anim.SetBool("flying", false);
+            currentState = state.Chilling;
         }
-        else
-        {
-            return findClosest(trees);
-        }
-    }
-
-    private GameObject findClosest(GameObject[] objs)
-    {
-        GameObject closestobj = null;
-        float closestDistance = float.MaxValue;
-
-        foreach (GameObject obj in objs)
-        {
-            float distance = Vector2.Distance(obj.transform.position, transform.position);
-
-            if (distance < closestDistance)
-            {
-                closestobj = obj;
-                closestDistance = distance;
-            }
-        }
-
-        return closestobj;
+        else if(Time.time > startFlyDelay) gotoObj(homeTree);
     }
 
     private GameObject findGarbage()
     {
-        GameObject[] nuts = GameObject.FindGameObjectsWithTag("Garbage");
-
-        if (nuts.Length == 0)
-        {
-            return null;
-        }
-        else
-        {
-            return findClosest(nuts);
-        }
+        return findClosestObj("Garbage");
     }
-
-    private float doggoDistance()
-    {
-        return Vector2.Distance(transform.position, doggo.transform.position);
-    }
-
 
     private float calculateNextTurnTime()
     {

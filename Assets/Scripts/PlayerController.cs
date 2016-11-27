@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour {
     /// <param name="coll"></param>
     void OnCollisionEnter2D(Collision2D coll)
     {
-        if((coll.gameObject.tag == "Squirrel") && noms == null )
+        if((coll.gameObject.tag == "Squirrel" || coll.gameObject.tag == "Magpie" ) && noms == null )
         {
             noms = coll.gameObject;
             anim.SetBool("biting", true);
