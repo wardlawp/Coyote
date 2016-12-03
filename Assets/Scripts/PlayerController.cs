@@ -70,15 +70,20 @@ public class PlayerController : MonoBehaviour {
     /// On collision with a Squirrel eat it
     /// </summary>
     /// <param name="coll"></param>
-    void OnCollisionEnter2D(Collision2D coll)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if((coll.gameObject.tag == "Squirrel" || coll.gameObject.tag == "Magpie" ) && noms == null )
+        if (other.isTrigger)
+            return;
+
+        if((other.gameObject.tag == "Squirrel" || other.gameObject.tag == "Magpie" ) && noms == null )
         {
-            noms = coll.gameObject;
+            noms = other.gameObject;
             sound.Play();
             anim.SetBool("biting", true);
             remainingBiteTime = biteTime;
             noms.SendMessage("bitten");
         }
     }
+
+
 }
