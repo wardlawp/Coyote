@@ -13,9 +13,11 @@ public class PlayerController : MonoBehaviour {
 
     GameObject noms;
 
+    AudioSource sound;
     Animator anim;
     // Use this for initialization
     void Start () {
+        sound = GetComponent<AudioSource>();
         anim = GetComponent<Animator>();
         remainingBiteTime = 0.0f;
         noms = null;
@@ -73,6 +75,7 @@ public class PlayerController : MonoBehaviour {
         if((coll.gameObject.tag == "Squirrel" || coll.gameObject.tag == "Magpie" ) && noms == null )
         {
             noms = coll.gameObject;
+            sound.Play();
             anim.SetBool("biting", true);
             remainingBiteTime = biteTime;
             noms.SendMessage("bitten");
