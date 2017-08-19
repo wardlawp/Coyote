@@ -7,8 +7,8 @@ public class FollowSubject : MonoBehaviour {
 
 	
 // Update is called once per frame
-void Update () {
+    void Update () {
         Vector3 subjectPos = subject.transform.position;
         transform.position = new Vector3(subjectPos.x, subjectPos.y, -10);
-	}
+    }
 }
