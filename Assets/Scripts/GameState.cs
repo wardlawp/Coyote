@@ -20,7 +20,7 @@ public class GameState : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+    void Update () {
         if(!ended  && (Time.time > (startTime + startTextTime)))
         {
             UIText.text = "";
@@ -37,5 +37,5 @@ public class GameState : MonoBehaviour {
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene("UBC2");
         }
-	}
+    }
 }
