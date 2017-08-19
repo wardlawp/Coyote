@@ -21,10 +21,10 @@ public class PlayerController : MonoBehaviour {
         anim = GetComponent<Animator>();
         remainingBiteTime = 0.0f;
         noms = null;
-	}
+    }
 	
 	// Update is called once per frame
-	void Update ()
+    void Update ()
     {
         if (remainingBiteTime > 0.0f)
         {
